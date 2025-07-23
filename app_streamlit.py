@@ -1,4 +1,3 @@
-
 import streamlit as st
 import requests
 from skyfield.api import load, EarthSatellite, wgs84
@@ -14,7 +13,14 @@ def get_iss_position():
     """Fetches TLE and calculates current ISS position."""
     try:
         url = "https://celestrak.org/NORAD/elements/gp.php?CATNR=25544&FORMAT=TLE"
-        response = requests.get(url, timeout=10)
+        
+        # --- FIX: Add a User-Agent header to mimic a browser request ---
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+        response = requests.get(url, timeout=10, headers=headers)
+        # --- End of FIX ---
+        
         response.raise_for_status()
         lines = response.text.strip().split('\n')
 
